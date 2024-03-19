@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './Login.css'
+import axios from 'axios'
 
 const Login = () => {
 
@@ -12,6 +13,28 @@ const Login = () => {
 
         console.log(username)
         console.log(password)
+
+        axios.post('http://127.0.0.1:4000/', {username: username, password:password})
+        .then(response => {
+            console.log(response)
+            localStorage.setItem('Bearer', response.data.access_token)
+        })
+    }
+
+    const VieWData = event => {
+        event.preventDefault()
+
+        const token = localStorage.getItem('Bearer')
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+
+        axios.get('http://127.0.0.1:4000/', {headers})
+        .then(response => {
+            console.log(response)
+        })
     }
 
     return (
@@ -33,6 +56,7 @@ const Login = () => {
                 <input className='form-input' type="password" placeholder="Password" value={password} onChange={event => setPassword(event.target.value)}/>
 
                 <button className='login_button' onClick={event => UserValidator(event)}>Log In</button>
+                <button className='login_button' onClick={event => VieWData(event)}>View</button>
 
             </form>
 
