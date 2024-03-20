@@ -1,40 +1,45 @@
 import React, { useState } from 'react'
 import './Login.css'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
+    const navigate = useNavigate()
+
+    const ERROT_MESSAGE = {
+        color: "red",
+        fontWeight: "bold",
+        marginTop: "10px",
+        fontSize: "20px"
+    }
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [error, serError] = useState('')
+    const [error, setError] = useState('')
 
     const UserValidator = event => {
         event.preventDefault()
 
-        console.log(username)
-        console.log(password)
+        if ((username === '') || (password === '')) setError("Please fill all field!")
 
-        axios.post('http://127.0.0.1:4000/', {username: username, password:password})
-        .then(response => {
-            console.log(response)
-            localStorage.setItem('Bearer', response.data.access_token)
-        })
-    }
+        else {
 
-    const VieWData = event => {
-        event.preventDefault()
+            const data_set = {
+                username: username,
+                password: password
+            }
 
-        const token = localStorage.getItem('Bearer')
+            axios.post('http://127.0.0.1:4000/user/validate/', data_set)
+            .then(response => {
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+                if (response.data.status === false) setError(response.data.message)
+                else navigate('/dummy/')
+        
+            })
+            .catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:4000/', {headers})
-        .then(response => {
-            console.log(response)
-        })
+        }
     }
 
     return (
@@ -50,13 +55,14 @@ const Login = () => {
                 <h3>Login Here</h3>
 
                 <label className='login-label' htmlFor="username">Username</label>
-                <input className='form-input' type="text" placeholder="Email or Phone" value={username} onChange={event => setUsername(event.target.value)}/>
+                <input className='form-input' type="text" placeholder="Username" value={username} onChange={event => setUsername(event.target.value)}/>
 
                 <label className='login-label' htmlFor="password">Password</label>
                 <input className='form-input' type="password" placeholder="Password" value={password} onChange={event => setPassword(event.target.value)}/>
 
                 <button className='login_button' onClick={event => UserValidator(event)}>Log In</button>
-                <button className='login_button' onClick={event => VieWData(event)}>View</button>
+                
+                <p style={ERROT_MESSAGE}>{error}</p>
 
             </form>
 
