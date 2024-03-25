@@ -34,7 +34,12 @@ const Login = () => {
             .then(response => {
 
                 if (response.data.status === false) setError(response.data.message)
-                else navigate('/dummy/')
+                else {
+                    console.log(response.data)
+                    localStorage.setItem("Bearer", response.data.access_token)
+                    // localStorage.setItem("admin", response.data.user_data.admin)
+                    navigate('/dummy/')
+                }
         
             })
             .catch(error => console.log(error))
