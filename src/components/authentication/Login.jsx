@@ -37,7 +37,7 @@ const Login = () => {
                 else {
                     console.log(response.data)
                     localStorage.setItem("Bearer", response.data.access_token)
-                    // localStorage.setItem("admin", response.data.user_data.admin)
+                    localStorage.setItem("Refresh", response.data.refresh_token)
                     navigate('/dummy/')
                 }
         
