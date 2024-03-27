@@ -23,7 +23,6 @@ const TopNavbar = () => {
         <div className='top-navbar-container'>
 
             <div className='title-container'>
-                {/* <h1 className='title-text'>Company Name</h1> */}
             </div>
 
             <div className='logout-div'>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Login.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -17,6 +17,32 @@ const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const [user_valid, setUserValid] = useState(false)
+
+    useEffect(() => {
+
+            console.log("Logging")
+
+            const fetchData = async () => {
+
+                const dataset = {
+                    refresh_token: localStorage.getItem('Refresh')
+                }
+
+                axios.post('http://127.0.0.1:4000/user/token/', dataset)
+                .then(response => {
+                    console.log("Auto Logging")
+                    localStorage.setItem("Bearer", response.data.access_token)
+                })
+                .catch(error => console.log(error))
+
+            }
+          
+            fetchData()
+          
+            setInterval(fetchData, 30000)
+
+    }, [])
 
     const UserValidator = event => {
         event.preventDefault()
@@ -36,6 +62,7 @@ const Login = () => {
                 if (response.data.status === false) setError(response.data.message)
                 else {
                     console.log(response.data)
+                    setUserValid(true)
                     localStorage.setItem("Bearer", response.data.access_token)
                     localStorage.setItem("Refresh", response.data.refresh_token)
                     navigate('/dummy/')
