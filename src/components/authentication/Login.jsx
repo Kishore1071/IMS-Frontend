@@ -17,7 +17,6 @@ const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
-    const [user_valid, setUserValid] = useState(false)
 
     useEffect(() => {
 
@@ -61,8 +60,8 @@ const Login = () => {
 
                 if (response.data.status === false) setError(response.data.message)
                 else {
+            
                     console.log(response.data)
-                    setUserValid(true)
                     localStorage.setItem("Bearer", response.data.access_token)
                     localStorage.setItem("Refresh", response.data.refresh_token)
                     navigate('/dummy/')
