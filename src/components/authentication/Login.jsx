@@ -7,7 +7,7 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    const ERROT_MESSAGE = {
+    const ERROR_MESSAGE = {
         color: "red",
         fontWeight: "bold",
         marginTop: "10px",
@@ -93,7 +93,7 @@ const Login = () => {
 
                 <button className='login_button' onClick={event => UserValidator(event)}>Log In</button>
                 
-                <p style={ERROT_MESSAGE}>{error}</p>
+                <p style={ERROR_MESSAGE}>{error}</p>
 
             </form>
 
